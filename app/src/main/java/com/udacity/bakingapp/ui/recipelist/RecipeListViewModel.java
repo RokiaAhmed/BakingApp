@@ -1,4 +1,5 @@
-package com.udacity.bakingapp.recipelist;
+package com.udacity.bakingapp.ui.recipelist;
+
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -10,7 +11,6 @@ import com.udacity.bakingapp.model.Recipe;
 
 import java.util.ArrayList;
 
-
 public class RecipeListViewModel extends AndroidViewModel {
     private RecipesRepository repository;
 
@@ -21,6 +21,7 @@ public class RecipeListViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<ArrayList<Recipe>> getAllRecipes(){
-        return repository.getAllRecipes();
+        MutableLiveData<ArrayList<Recipe>> s = repository.getAllRecipes();
+        return s;
     }
 }
