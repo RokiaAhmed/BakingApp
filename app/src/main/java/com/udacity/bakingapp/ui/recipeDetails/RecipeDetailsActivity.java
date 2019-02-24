@@ -11,7 +11,8 @@ import com.udacity.bakingapp.ui.recipelist.RecipeListActivity;
 import com.udacity.bakingapp.ui.stepdetails.StepDetailsActivity;
 
 
-public class RecipeDetailsActivity extends AppCompatActivity implements StepsListFragment.OnStepClickListener{
+public class RecipeDetailsActivity extends AppCompatActivity  {
+//        implements StepsListFragment.OnStepClickListener{
 
     private static Recipe recipeDetails;
 
@@ -24,24 +25,29 @@ public class RecipeDetailsActivity extends AppCompatActivity implements StepsLis
             recipeDetails = (Recipe) getIntent().getExtras().getSerializable(RecipeListActivity.RECIPE_OBJECT);
         }
         setTitle(recipeDetails.getName());
+
+        Intent intent = new Intent(this, StepDetailsActivity.class);
+        intent.putExtra("step_details", recipeDetails.getSteps().get(0));
+        startActivity(intent);
+
         // Add the fragment to its container using a FragmentManager and a Transaction
         FragmentManager fragmentManager = getSupportFragmentManager();
         // Create a new head BodyPartFragment
-        StepsListFragment stepsFragment = new StepsListFragment();
+//        StepsListFragment stepsFragment = new StepsListFragment();
 
         // Set the list of image id's for the head fragment and set the position to the second image in the list
-        stepsFragment.setRecipeSteps(recipeDetails);
-        fragmentManager.beginTransaction()
-                .add(R.id.steps_container, stepsFragment)
-                .commit();
+//        stepsFragment.setRecipeSteps(recipeDetails);
+//        fragmentManager.beginTransaction()
+//                .add(R.id.steps_container, stepsFragment)
+//                .commit();
 
 
     }
 
-    @Override
-    public void onStepSelected(int position) {
-        Intent intent = new Intent(this, StepDetailsActivity.class);
-        intent.putExtra("step_details", recipeDetails.getSteps().get(position));
-        startActivity(intent);
-    }
+//    @Override
+//    public void onStepSelected(int position) {
+//        Intent intent = new Intent(this, StepDetailsActivity.class);
+//        intent.putExtra("step_details", recipeDetails.getSteps().get(position));
+//        startActivity(intent);
+//    }
 }
