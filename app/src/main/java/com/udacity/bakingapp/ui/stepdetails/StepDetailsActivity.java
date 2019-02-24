@@ -20,15 +20,15 @@ public class StepDetailsActivity extends AppCompatActivity {
         if (getIntent().getExtras().containsKey("step_details")){
          stepDetails = (Step) getIntent().getExtras().get("step_details");
         }
-        videoUrl = stepDetails.getVideoURL();
-        Log.d("videoUrl", videoUrl);
+//        videoUrl = stepDetails.getVideoURL();
+//        Log.d("videoUrl", videoUrl);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         // Create a new head BodyPartFragment
         StepFragment videoFragment = new StepFragment();
 
         // Set the list of image id's for the head fragment and set the position to the second image in the list
-        videoFragment.setVideoUrl(videoUrl);
+        videoFragment.setStepDetails(stepDetails);
         fragmentManager.beginTransaction()
                 .add(R.id.step_container, videoFragment)
                 .commit();

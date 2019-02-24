@@ -39,6 +39,6 @@ dependencies {
     def lifecycle_version = "1.1.1"
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     //media playback
-    compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
 
 }

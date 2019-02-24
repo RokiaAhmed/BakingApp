@@ -1,5 +1,6 @@
 package com.udacity.bakingapp.ui.stepdetails;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -28,12 +30,14 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.udacity.bakingapp.R;
+import com.udacity.bakingapp.model.Step;
 
 public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     private SimpleExoPlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
-    private String videoUrl;
+    private String videoUrl, shortDescription, description;
+    private TextView shortDescriptionTextView, descriptionTextView;
 
     public StepFragment() {
     }
@@ -43,16 +47,44 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
+        if (savedInstanceState != null && mExoPlayer != null) {
+            mExoPlayer.setPlayWhenReady(savedInstanceState.getBoolean("PLAYER_IS_READY_KEY"));
+            mExoPlayer.seekTo(savedInstanceState.getLong("PLAYER_CURRENT_POS_KEY"));
+         }
+
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
         // Initialize the player.
-        initializePlayer(Uri.parse(videoUrl));
+        if (videoUrl != null){
+            initializePlayer(Uri.parse(videoUrl));
+        }
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // In ORIENTATION_PORTRAIT
+            shortDescriptionTextView = rootView.findViewById(R.id.tv_step_short_description);
+            descriptionTextView = rootView.findViewById(R.id.tv_step_description);
+            shortDescriptionTextView.setText(shortDescription);
+            descriptionTextView.setText(description);
+
+        }
         return rootView;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
+    public void setStepDetails(Step stepDetails) {
+        this.videoUrl = stepDetails.getVideoURL();
+        shortDescription = stepDetails.getShortDescription();
+        description = stepDetails.getDescription();
         Log.d("videoUrl", videoUrl);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mExoPlayer == null) {
+            return;
+        }
+            outState.putLong("PLAYER_CURRENT_POS_KEY", mExoPlayer.getCurrentPosition());
+        outState.putBoolean("PLAYER_IS_READY_KEY", mExoPlayer.getPlayWhenReady());
     }
 
     /**
@@ -80,7 +112,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
 
     private void releasePlayer() {
-        if (mExoPlayer != null){
+        if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
@@ -91,7 +123,9 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     @Override
     public void onResume() {
         super.onResume();
-        initializePlayer(Uri.parse(videoUrl));
+        if (videoUrl != null){
+            initializePlayer(Uri.parse(videoUrl));
+        }
     }
 
     @Override
@@ -123,11 +157,11 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
+        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
 //            Log.d(TAG, "onPlayerStateChanged: PLAYING");
-        } else if((playbackState == ExoPlayer.STATE_READY)){
+        } else if ((playbackState == ExoPlayer.STATE_READY)) {
 //            Log.d(TAG, "onPlayerStateChanged: PAUSED");
-        }else if (playbackState == ExoPlayer.STATE_ENDED){
+        } else if (playbackState == ExoPlayer.STATE_ENDED) {
             mExoPlayer.seekTo(0);
             mExoPlayer.setPlayWhenReady(false);
         }
