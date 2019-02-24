@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">BakingTime</string>
-    <string name="ingredient_title">Ingredient:</string>
+    <string name="ingredient_title" translatable="false">Ingredient:</string>
     Ingredient
 </resources>

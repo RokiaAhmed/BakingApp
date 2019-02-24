@@ -4,5 +4,5 @@ import com.udacity.bakingapp.model.Recipe;
 
 public interface StepActionListener {
 
-    void onStepClicked(Recipe recipe);
+    void onClick(int position);
 }

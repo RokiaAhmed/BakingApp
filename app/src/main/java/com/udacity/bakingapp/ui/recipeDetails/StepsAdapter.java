@@ -8,18 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.udacity.bakingapp.R;
-import com.udacity.bakingapp.model.Recipe;
 import com.udacity.bakingapp.model.Step;
-import com.udacity.bakingapp.ui.recipelist.RecipeActionListener;
 
 import java.util.ArrayList;
 
-public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.ViewHolder> {
+public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
 
     private ArrayList<Step> stepsList;
     private StepActionListener recipeActionListener;
 
-    public RecipeStepsAdapter(StepActionListener recipeActionListener, ArrayList<Step> steps) {
+    public StepsAdapter(StepActionListener recipeActionListener, ArrayList<Step> steps) {
         this.recipeActionListener = recipeActionListener;
         stepsList = steps;
     }
@@ -33,13 +31,13 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeStepsAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull StepsAdapter.ViewHolder viewHolder, final int i) {
         viewHolder.stepNumberTextView.setText(String.valueOf(i+1));
         viewHolder.stepShortDescriptionTextView.setText(stepsList.get(i).getShortDescription());
         viewHolder.stepShortDescriptionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                recipeActionListener.onRecipeClicked(stepsList.get(i));
+                recipeActionListener.onClick(i);
 
             }
         });
