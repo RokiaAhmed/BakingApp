@@ -14,7 +14,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.recipeDetails.RecipeDetailsActivity"
-            android:parentActivityName=".ui.recipelist.RecipeListActivity" />
+            android:parentActivityName=".ui.recipelist.RecipeListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            />
         <activity android:name=".ui.recipelist.RecipeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

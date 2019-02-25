@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 import com.udacity.bakingapp.R;
 import com.udacity.bakingapp.model.Step;
 
@@ -37,9 +39,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     private SimpleExoPlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
-    private String videoUrl, shortDescription, description;
+    private String videoUrl, shortDescription, description, stepImage;
     private TextView shortDescriptionTextView, descriptionTextView;
-    private long testedPosition;
+    private ImageView stepImageView;
+    private static long testedPosition;
     private boolean playWhenReady;
 
     public StepFragment() {
@@ -62,12 +65,25 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         // Initialize the player view.
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.playerView);
+        stepImageView = rootView.findViewById(R.id.step_image_view);
         // Initialize the player.
-        if (videoUrl != null) {
+        if (videoUrl != null && !videoUrl.isEmpty()) {
+             mPlayerView.setVisibility(View.VISIBLE);
+             stepImageView.setVisibility(View.GONE);
             Toast.makeText(getActivity(), "videoUrl"+String.valueOf(testedPosition), Toast.LENGTH_LONG).show();
-
             initializePlayer(Uri.parse(videoUrl));
+        }else if (stepImage != null &&  !stepImage.isEmpty()){
+            mPlayerView.setVisibility(View.GONE);
+            stepImageView.setVisibility(View.VISIBLE);
+            Picasso.get().load(stepImage).fit()
+                    .error(R.drawable.ic_video_off).placeholder(R.mipmap.ic_launcher).into(stepImageView);
+        }else {
+            mPlayerView.setVisibility(View.GONE);
+            stepImageView.setVisibility(View.VISIBLE);
+            stepImageView.setImageResource(R.drawable.ic_video_off);
+//            Picasso.get().load(R.drawable.ic_video_off).fit().into(stepImageView);
         }
+
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             // In ORIENTATION_PORTRAIT
@@ -82,6 +98,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     public void setStepDetails(Step stepDetails) {
         this.videoUrl = stepDetails.getVideoURL();
+        stepImage = stepDetails.getThumbnailURL();
         shortDescription = stepDetails.getShortDescription();
         description = stepDetails.getDescription();
         Log.d("videoUrl", videoUrl);
