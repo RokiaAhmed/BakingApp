@@ -41,6 +41,12 @@ public class StepDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", currentPosition);
+    }
+
     public void onPreviousClicked(View view) {
         if (currentPosition == 0){
             return;
