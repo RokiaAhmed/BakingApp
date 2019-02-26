@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -175,6 +176,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     public void onDestroy() {
         super.onDestroy();
 //        releasePlayer();
+        testedPosition =0;
     }
 
     @Override

@@ -1,17 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.stepdetails.StepDetailsActivity">
 
     <FrameLayout
         android:id="@+id/step_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.udacity.bakingapp.ui.stepdetails.VideoFragment"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"/>
 
 
+    <Button
+        android:id="@+id/btn_previous"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Previous"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_container"
+        android:onClick="onPreviousClicked"/>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_container"
+        android:onClick="onNextClicked"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -4,10 +4,12 @@ package com.udacity.bakingapp.ui.recipelist;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
 
     private RecyclerView recipeRecyclerView;
     private LinearLayoutManager linearLayoutManager;
+    private GridLayoutManager gridLayoutManager;
     private RecipeListViewModel mViewModel;
     public static final String RECIPE_OBJECT = "recipe_object";
     private RecipeAdapter recipeAdapter;
@@ -29,11 +32,17 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_recipe_list);
         mViewModel = obtainViewModel(this);
         recipeRecyclerView = findViewById(R.id.rv_recipe_list);
         linearLayoutManager = new LinearLayoutManager(this);
-        recipeRecyclerView.setLayoutManager(linearLayoutManager);
+        gridLayoutManager = new GridLayoutManager(this, 3);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recipeRecyclerView.setLayoutManager(linearLayoutManager);
+        }else {
+            recipeRecyclerView.setLayoutManager(gridLayoutManager);
+        }
         recipeRecyclerView.setHasFixedSize(true);
         recipeAdapter = new RecipeAdapter(this, new ArrayList<Recipe>());
         recipeRecyclerView.setAdapter(recipeAdapter);
