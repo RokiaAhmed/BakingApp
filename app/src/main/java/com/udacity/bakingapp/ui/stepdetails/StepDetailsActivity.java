@@ -28,6 +28,11 @@ public class StepDetailsActivity extends AppCompatActivity {
             currentPosition = getIntent().getIntExtra("position", -1);
         }
 
+        if(savedInstanceState != null){
+            currentPosition = savedInstanceState.getInt("position");
+            stepFragment.setStepDetails(stepsList.get(currentPosition));
+        }
+
         fragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {
             // Create a new head BodyPartFragment
@@ -41,11 +46,7 @@ public class StepDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("position", currentPosition);
-    }
+
 
     public void onPreviousClicked(View view) {
         if (currentPosition == 0){

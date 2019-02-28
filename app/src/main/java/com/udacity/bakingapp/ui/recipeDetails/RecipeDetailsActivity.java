@@ -17,6 +17,7 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
     private static Recipe recipeDetails;
     private boolean mTwoPane;
+    private int currentPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +59,16 @@ public class RecipeDetailsActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", currentPosition);
+    }
+
+    @Override
     public void onStepSelected(int position) {
         if (mTwoPane) {
             StepFragment stepFragment = new StepFragment();
-
+            currentPosition = position;
             stepFragment.setStepDetails(recipeDetails.getSteps().get(position));
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.step_container, stepFragment)
