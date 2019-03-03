@@ -60,6 +60,9 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
         recipeAdapter = new RecipeAdapter(this, new ArrayList<Recipe>());
         recipeRecyclerView.setAdapter(recipeAdapter);
 
+        // Get the IdlingResource instance
+        getIdlingResource();
+
         getData();
     }
 
