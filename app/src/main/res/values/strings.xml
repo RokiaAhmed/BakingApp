@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">BakingTime</string>
     <string name="ingredient_title" translatable="false">Ingredient:</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
     Ingredient
 </resources>

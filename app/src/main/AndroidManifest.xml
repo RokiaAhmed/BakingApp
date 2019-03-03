@@ -12,12 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
+
+        <!-- android:configChanges="keyboardHidden|orientation|screenSize" -->
 
         <activity
             android:name=".ui.recipeDetails.RecipeDetailsActivity"
-            android:parentActivityName=".ui.recipelist.RecipeListActivity"
-            />
+            android:parentActivityName=".ui.recipelist.RecipeListActivity" />
         <activity android:name=".ui.recipelist.RecipeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.stepdetails.StepDetailsActivity"/>
+        <activity android:name=".ui.stepdetails.StepDetailsActivity" />
+
+        <service
+            android:name=".GridWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver android:name=".RecipeWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

@@ -28,10 +28,7 @@ public class StepDetailsActivity extends AppCompatActivity {
             currentPosition = getIntent().getIntExtra("position", -1);
         }
 
-        if(savedInstanceState != null){
-            currentPosition = savedInstanceState.getInt("position");
-            stepFragment.setStepDetails(stepsList.get(currentPosition));
-        }
+
 
         fragmentManager = getSupportFragmentManager();
         if (savedInstanceState == null) {

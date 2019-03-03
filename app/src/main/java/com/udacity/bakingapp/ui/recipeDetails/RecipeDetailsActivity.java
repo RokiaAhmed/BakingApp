@@ -31,12 +31,19 @@ public class RecipeDetailsActivity extends AppCompatActivity
 
         if (findViewById(R.id.step_container) != null) {
             mTwoPane = true;
-
-            if (savedInstanceState == null) {
+             if (savedInstanceState == null) {
                 StepFragment stepFragment = new StepFragment();
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.step_container, stepFragment)
                         .commit();
+
+            }else {
+                 StepFragment stepFragment = new StepFragment();
+                 currentPosition = savedInstanceState.getInt("position");
+                 stepFragment.setStepDetails(recipeDetails.getSteps().get(currentPosition));
+                 getSupportFragmentManager().beginTransaction()
+                         .replace(R.id.step_container, stepFragment)
+                         .commit();
 
             }
 

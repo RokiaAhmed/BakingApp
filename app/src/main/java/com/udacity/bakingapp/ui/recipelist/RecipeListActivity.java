@@ -1,9 +1,13 @@
 package com.udacity.bakingapp.ui.recipelist;
 
 
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +17,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.udacity.bakingapp.R;
+import com.udacity.bakingapp.RecipeWidgetProvider;
 import com.udacity.bakingapp.model.Recipe;
 import com.udacity.bakingapp.ui.recipeDetails.RecipeDetailsActivity;
 import com.udacity.bakingapp.utills.ConnectionDetector;
@@ -54,6 +60,18 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
                 public void onChanged(@Nullable ArrayList<Recipe> recipes) {
                     recipeAdapter.setRecipeList(recipes);
                     recipeAdapter.notifyDataSetChanged();
+                    SharedPreferences offlineDataPrefs = getSharedPreferences(
+                            "OFFLINE_DATA_SHARED", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = offlineDataPrefs.edit();
+                    editor.putString("recipes", new Gson().toJson(recipes));
+                    editor.apply();
+
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(RecipeListActivity.this);
+                    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(RecipeListActivity.this, RecipeWidgetProvider.class));
+                    //Trigger data update to handle the GridView widgets and force a data refresh
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_grid_view);
+                    //Now update all widgets
+                    RecipeWidgetProvider.updateRecipeWidgets(RecipeListActivity.this, appWidgetManager,appWidgetIds);
                 }
             });
         } else {
