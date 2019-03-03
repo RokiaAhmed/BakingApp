@@ -1,5 +1,7 @@
 package com.udacity.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +11,7 @@ import android.widget.RemoteViewsService;
 import com.google.gson.Gson;
 import com.udacity.bakingapp.model.Ingredient;
 import com.udacity.bakingapp.model.Recipe;
+import com.udacity.bakingapp.ui.recipelist.RecipeListActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +48,12 @@ class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             ArrayList<Recipe> recipesList = new ArrayList<>(Arrays.asList(new Gson().fromJson(offlineData, Recipe[].class)));
             list = recipesList.get(0).getIngredients();
             recipeName = recipesList.get(0).getName();
+            if (recipeName != null){
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(mContext, RecipeWidgetProvider.class));
+                  //Now update all widgets
+                RecipeWidgetProvider.updateRecipeWidgets(mContext, appWidgetManager,appWidgetIds);
+            }
         }
     }
 

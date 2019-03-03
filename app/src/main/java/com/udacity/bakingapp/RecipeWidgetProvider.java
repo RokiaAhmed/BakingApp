@@ -34,7 +34,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, RecipeListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         // allow widget to handle clicks
-//        views.setOnClickPendingIntent(R.id.widget_grid_view, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -55,10 +55,12 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     private static RemoteViews getGardenGridRemoteView(Context context) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_grid_view);
+
+        views.setTextViewText(R.id.widget_recipe_name, GridRemoteViewsFactory.getRecipeName());
+
         // Set the GridWidgetService intent to act as the adapter for the GridView
         Intent intent = new Intent(context, GridWidgetService.class);
         views.setRemoteAdapter(R.id.widget_grid_view, intent);
-        views.setTextViewText(R.id.widget_recipe_name, GridRemoteViewsFactory.getRecipeName());
         // Handle empty gardens
         views.setEmptyView(R.id.widget_grid_view, R.id.empty_view);
         return views;

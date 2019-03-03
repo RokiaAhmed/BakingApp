@@ -53,6 +53,10 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
         recipeAdapter = new RecipeAdapter(this, new ArrayList<Recipe>());
         recipeRecyclerView.setAdapter(recipeAdapter);
 
+        getData();
+    }
+
+    private void getData(){
         ConnectionDetector connectionDetector = new ConnectionDetector(this);
         if (connectionDetector.isConnectingToInternet()) {
             mViewModel.getAllRecipes().observe(this, new Observer<ArrayList<Recipe>>() {
@@ -77,6 +81,12 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
         } else {
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 
     public static RecipeListViewModel obtainViewModel(FragmentActivity activity) {
