@@ -1,16 +1,24 @@
 package com.udacity.bakingapp;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingRegistry;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.udacity.bakingapp.ui.recipelist.RecipeListActivity;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -20,15 +28,29 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class RecyclerViewRecipesList {
 
-    @Rule
-//    public ActivityTestRule<RecipeListActivity> activity
-//            = new ActivityTestRule<RecipeListActivity>(RecipeListActivity.class);
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+    private IdlingResource mIdlingResource;
 
-        assertEquals("com.udacity.bakingapp", appContext.getPackageName());
+    @Rule
+    public ActivityTestRule<RecipeListActivity> mActivityTestRule =
+            new ActivityTestRule<>(RecipeListActivity.class);
+
+    @Before
+    public void registerIdlingResource() {
+        mIdlingResource = mActivityTestRule.getActivity().getIdlingResource();
+        Espresso.registerIdlingResources(mIdlingResource);
+    }
+
+    @Test
+    public void scrollToPosition() {
+        Espresso.onView(ViewMatchers.withId(R.id.rv_recipe_list))
+                .perform((ViewAction) RecyclerViewActions.actionOnItemAtPosition(1, ViewActions.click()));
+    }
+
+    @After
+    public void unregisterIdlingResource() {
+        if (mIdlingResource != null){
+            Espresso.unregisterIdlingResources(mIdlingResource);
+        }
     }
 
 }

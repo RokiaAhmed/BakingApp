@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.udacity.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.udacity.bakingapp.R;
 import com.udacity.bakingapp.RecipeWidgetProvider;
 import com.udacity.bakingapp.model.Recipe;
@@ -25,6 +29,7 @@ import com.udacity.bakingapp.ui.recipeDetails.RecipeDetailsActivity;
 import com.udacity.bakingapp.utills.ConnectionDetector;
 
 import java.util.ArrayList;
+
 
 public class RecipeListActivity extends AppCompatActivity implements RecipeActionListener {
 
@@ -34,6 +39,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
     private RecipeListViewModel mViewModel;
     public static final String RECIPE_OBJECT = "recipe_object";
     private RecipeAdapter recipeAdapter;
+    // The Idling Resource which will be null in production.
+    @Nullable private SimpleIdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +66,18 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
     private void getData(){
         ConnectionDetector connectionDetector = new ConnectionDetector(this);
         if (connectionDetector.isConnectingToInternet()) {
+            if (mIdlingResource != null) {
+                mIdlingResource.setIdleState(false);
+            }
+
             mViewModel.getAllRecipes().observe(this, new Observer<ArrayList<Recipe>>() {
                 @Override
                 public void onChanged(@Nullable ArrayList<Recipe> recipes) {
                     recipeAdapter.setRecipeList(recipes);
                     recipeAdapter.notifyDataSetChanged();
+                    if (recipes.size()>0 && mIdlingResource != null) {
+                        mIdlingResource.setIdleState(true);
+                    }
                     SharedPreferences offlineDataPrefs = getSharedPreferences(
                             "OFFLINE_DATA_SHARED", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = offlineDataPrefs.edit();
@@ -101,4 +115,17 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeActio
         intent.putExtra(RECIPE_OBJECT, recipe);
         startActivity(intent);
     }
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
 }
